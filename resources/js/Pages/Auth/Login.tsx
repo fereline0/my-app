@@ -20,7 +20,7 @@ export default function Login({
         remember: false,
     });
 
-    const submit: FormEventHandler = (e) => {
+    const login: FormEventHandler = (e) => {
         e.preventDefault();
 
         post(route("login"), {
@@ -80,21 +80,21 @@ export default function Login({
                     <label htmlFor="remember">Запомнить меня</label>
                 </div>
 
-                <div className="flex items-center justify-end">
+                <div className="flex items-center gap-2 justify-end">
                     {canResetPassword && (
                         <Link href={route("password.request")}>
                             Забыли пароль?
                         </Link>
                     )}
-
-                    <Button
-                        onClick={submit}
-                        className="ms-4"
-                        disabled={processing}
-                    >
-                        Войти
-                    </Button>
+                    <Link href={route("register")}>Есть аккаунт?</Link>
                 </div>
+                <Button
+                    className="w-full"
+                    onClick={login}
+                    disabled={processing}
+                >
+                    Войти
+                </Button>
             </div>
         </GuestLayout>
     );

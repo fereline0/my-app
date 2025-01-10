@@ -14,7 +14,7 @@ export default function Register() {
         password_confirmation: "",
     });
 
-    const submit: FormEventHandler = (e) => {
+    const register: FormEventHandler = (e) => {
         e.preventDefault();
 
         post(route("register"), {
@@ -26,8 +26,8 @@ export default function Register() {
         <GuestLayout>
             <Head title="Register" />
 
-            <form onSubmit={submit}>
-                <div>
+            <div className="space-y-4">
+                <div className="space-y-2">
                     <Input
                         id="name"
                         name="name"
@@ -41,7 +41,7 @@ export default function Register() {
                     <InputError message={errors.name} className="mt-2" />
                 </div>
 
-                <div className="mt-4">
+                <div className="space-y-2">
                     <Input
                         id="email"
                         type="email"
@@ -56,7 +56,7 @@ export default function Register() {
                     <InputError message={errors.email} className="mt-2" />
                 </div>
 
-                <div className="mt-4">
+                <div className="space-y-2">
                     <Input
                         id="password"
                         type="password"
@@ -71,7 +71,7 @@ export default function Register() {
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="mt-4">
+                <div className="space-y-2">
                     <Input
                         id="password_confirmation"
                         type="password"
@@ -93,12 +93,16 @@ export default function Register() {
 
                 <div className="mt-4 flex items-center justify-end">
                     <Link href={route("login")}>Уже зарегистрированы?</Link>
-
-                    <Button className="ms-4" disabled={processing}>
-                        Зарегистрироваться
-                    </Button>
                 </div>
-            </form>
+
+                <Button
+                    onClick={register}
+                    className="w-full"
+                    disabled={processing}
+                >
+                    Зарегистрироваться
+                </Button>
+            </div>
         </GuestLayout>
     );
 }

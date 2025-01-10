@@ -38,11 +38,16 @@ class NewPasswordController extends Controller
             'token' => 'required',
             'email' => 'required|email',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'token.required' => 'Токен обязателен для сброса пароля.',
+            'email.required' => 'Электронная почта обязательна для заполнения.',
+            'email.email' => 'Электронная почта должна быть корректным адресом электронной почты.',
+            'password.required' => 'Пароль обязателен для заполнения.',
+            'password.confirmed' => 'Пароли не совпадают.',
+            'password.min' => 'Пароль должен содержать не менее :min символов.',
+            'password.regex' => 'Пароль должен содержать хотя бы одну букву и одну цифру.',
         ]);
 
-        // Here we will attempt to reset the user's password. If it is successful we
-        // will update the password on an actual user model and persist it to the
-        // database. Otherwise we will parse the error and return the response.
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
@@ -55,11 +60,8 @@ class NewPasswordController extends Controller
             }
         );
 
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
         if ($status == Password::PASSWORD_RESET) {
-            return redirect()->route('login')->with('status', __($status));
+            return redirect()->route('login')->with('status', 'Пароль успешно сброшен.');
         }
 
         throw ValidationException::withMessages([

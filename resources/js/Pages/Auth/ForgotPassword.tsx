@@ -10,7 +10,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
         email: "",
     });
 
-    const submit: FormEventHandler = (e) => {
+    const forgotPassword: FormEventHandler = (e) => {
         e.preventDefault();
 
         post(route("password.email"));
@@ -26,26 +26,27 @@ export default function ForgotPassword({ status }: { status?: string }) {
                 </div>
             )}
 
-            <form onSubmit={submit}>
-                <Input
-                    id="email"
-                    type="email"
-                    name="email"
-                    value={data.email}
-                    className="mt-1 block w-full"
-                    placeholder="Почта"
-                    autoComplete="username"
-                    onChange={(e) => setData("email", e.target.value)}
-                />
+            <div className="space-y-4">
+                <div className="space-y-2">
+                    <Input
+                        id="email"
+                        type="email"
+                        name="email"
+                        value={data.email}
+                        className="block w-full"
+                        placeholder="Почта"
+                        autoComplete="username"
+                        onChange={(e) => setData("email", e.target.value)}
+                    />
+                    <InputError message={errors.email} />
+                </div>
 
-                <InputError message={errors.email} className="mt-2" />
-
-                <div className="mt-4 flex items-center justify-end">
-                    <Button className="ms-4" disabled={processing}>
+                <div className="flex items-center justify-end">
+                    <Button onClick={forgotPassword} disabled={processing}>
                         Отправить ссылку для сброса пароля
                     </Button>
                 </div>
-            </form>
+            </div>
         </GuestLayout>
     );
 }

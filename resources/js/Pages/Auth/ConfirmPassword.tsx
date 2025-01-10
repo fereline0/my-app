@@ -10,7 +10,7 @@ export default function ConfirmPassword() {
         password: "",
     });
 
-    const submit: FormEventHandler = (e) => {
+    const confirmPassword: FormEventHandler = (e) => {
         e.preventDefault();
 
         post(route("password.confirm"), {
@@ -22,28 +22,28 @@ export default function ConfirmPassword() {
         <GuestLayout>
             <Head title="Подтверждение пароля" />
 
-            <form onSubmit={submit}>
-                <div className="mt-4">
+            <div className="space-y-4">
+                <div className="space-y-2">
                     <Input
                         id="password"
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="block w-full"
                         placeholder="Пароль"
                         autoComplete="current-password"
                         onChange={(e) => setData("password", e.target.value)}
                     />
 
-                    <InputError message={errors.password} className="mt-2" />
+                    <InputError message={errors.password} />
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    <Button className="ms-4" disabled={processing}>
+                <div className="flex items-center justify-end">
+                    <Button onClick={confirmPassword} disabled={processing}>
                         Подтвердить
                     </Button>
                 </div>
-            </form>
+            </div>
         </GuestLayout>
     );
 }
