@@ -31,7 +31,7 @@ export default function Header(props: IHeaderProps) {
             <CardHeader>
                 <nav className="flex justify-between items-center">
                     <h3 className="text-xl font-bold">
-                        <CustomLink href="/">
+                        <CustomLink href={route("index")}>
                             {import.meta.env.VITE_APP_NAME}
                         </CustomLink>
                     </h3>
