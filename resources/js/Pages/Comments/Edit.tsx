@@ -32,7 +32,7 @@ export default function Edit({ comment }: IEditProps) {
                         Редактирование комментария
                     </h2>
                     <p className="mt-1 text-sm text-gray-600">
-                        Здесь вы можете обновить инофрмацию о комментарие.
+                        Здесь вы можете обновить информацию о комментарие.
                     </p>
                 </CardHeader>
 

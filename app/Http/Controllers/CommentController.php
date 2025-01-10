@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CommentRequest;
+use App\Http\Requests\CommentStoreRequest;
+use App\Http\Requests\CommentUpdateRequest;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class CommentController extends Controller
 {
-    public function store(CommentRequest $request)
+    public function store(CommentStoreRequest $request)
     {
         Comment::create([
             'request_id' => $request->request_id,
@@ -30,7 +31,7 @@ class CommentController extends Controller
         ]);
     }
 
-    public function update(CommentRequest $request, $id)
+    public function update(CommentUpdateRequest $request, $id)
     {
         $comment = Comment::findOrFail($id);
 
