@@ -52,12 +52,12 @@ export default function Request(props: IRequestProps) {
     };
 
     const canEdit =
-        props.permissions.includes("edit request") ??
+        props.permissions.includes("edit request") ||
         (props.request.user_id == user.id &&
             props.request.status?.name == "Открыто");
 
     const canDelete =
-        props.permissions.includes("delete request") ??
+        props.permissions.includes("delete request") ||
         (props.request.user_id == user.id &&
             props.request.status?.name == "Открыто");
 
@@ -84,97 +84,99 @@ export default function Request(props: IRequestProps) {
                             </h2>
                         </div>
 
-                        <AlertDialog>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger>
-                                    <Button size="icon">
-                                        <IoMdMore size={20} />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    {canEditStatus && (
-                                        <>
-                                            {props.request.status?.name ===
-                                            "Открыто" ? (
-                                                <DropdownMenuItem>
-                                                    <Link
-                                                        href={route(
-                                                            "requests.close",
-                                                            props.request.id
-                                                        )}
-                                                        method="put"
-                                                    >
-                                                        Закрыть обращение
-                                                    </Link>
-                                                </DropdownMenuItem>
-                                            ) : (
-                                                <DropdownMenuItem>
-                                                    <Link
-                                                        href={route(
-                                                            "requests.open",
-                                                            props.request.id
-                                                        )}
-                                                        method="put"
-                                                    >
-                                                        Открыть обращение
-                                                    </Link>
-                                                </DropdownMenuItem>
-                                            )}
-                                        </>
-                                    )}
-                                    {canEdit && (
-                                        <DropdownMenuItem>
+                        {(canEditStatus || canDelete || canEdit) && (
+                            <AlertDialog>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger>
+                                        <Button size="icon">
+                                            <IoMdMore size={20} />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        {canEditStatus && (
+                                            <>
+                                                {props.request.status?.name ===
+                                                "Открыто" ? (
+                                                    <DropdownMenuItem>
+                                                        <Link
+                                                            href={route(
+                                                                "requests.close",
+                                                                props.request.id
+                                                            )}
+                                                            method="put"
+                                                        >
+                                                            Закрыть обращение
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                ) : (
+                                                    <DropdownMenuItem>
+                                                        <Link
+                                                            href={route(
+                                                                "requests.open",
+                                                                props.request.id
+                                                            )}
+                                                            method="put"
+                                                        >
+                                                            Открыть обращение
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                )}
+                                            </>
+                                        )}
+                                        {canEdit && (
+                                            <DropdownMenuItem>
+                                                <Link
+                                                    href={route(
+                                                        "requests.edit",
+                                                        props.request.id
+                                                    )}
+                                                >
+                                                    Редактировать
+                                                </Link>
+                                            </DropdownMenuItem>
+                                        )}
+                                        {canDelete && (
+                                            <DropdownMenuItem>
+                                                <AlertDialogTrigger>
+                                                    Удалить
+                                                </AlertDialogTrigger>
+                                            </DropdownMenuItem>
+                                        )}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>
+                                            Вы уверены, что хотите удалить
+                                            обращение?
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            После удаления обращения вы не
+                                            сможете восстановить его. Данное
+                                            действие необратимо.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>
+                                            Отмена
+                                        </AlertDialogCancel>
+
+                                        <AlertDialogAction>
                                             <Link
                                                 href={route(
-                                                    "requests.edit",
+                                                    "requests.destroy",
                                                     props.request.id
                                                 )}
+                                                method="delete"
                                             >
-                                                Редактировать
+                                                Удалить обращение
                                             </Link>
-                                        </DropdownMenuItem>
-                                    )}
-                                    {canDelete && (
-                                        <DropdownMenuItem>
-                                            <AlertDialogTrigger>
-                                                Удалить
-                                            </AlertDialogTrigger>
-                                        </DropdownMenuItem>
-                                    )}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>
-                                        Вы уверены, что хотите удалить
-                                        обращение?
-                                    </AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        После удаления обращения вы не сможете
-                                        восстановить его. Данное действие
-                                        необратимо.
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>
-                                        Отмена
-                                    </AlertDialogCancel>
-
-                                    <AlertDialogAction>
-                                        <Link
-                                            href={route(
-                                                "requests.destroy",
-                                                props.request.id
-                                            )}
-                                            method="delete"
-                                        >
-                                            Удалить обращение
-                                        </Link>
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        )}
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
                         {props.request.user && (

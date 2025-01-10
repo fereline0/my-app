@@ -30,4 +30,22 @@ class RequestRequest extends FormRequest
             ],
         ];
     }
+
+    /**
+     * Get the validation error messages.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'title.required' => 'Название обращения обязательно для его создания и должно быть заполнено.',
+            'title.string' => 'Название обращения должно быть строкой.',
+            'title.max' => 'Название обращения не должно превышать 255 символов.',
+            'value.required' => 'Значение обязательно для указания и должно быть заполнено.',
+            'value.string' => 'Значение должно быть строкой.',
+            'category_id.required' => 'Категория обязательна для выбора и должна быть указана.',
+            'category_id.exists' => 'Выбранная категория не существует.',
+        ];
+    }
 }
