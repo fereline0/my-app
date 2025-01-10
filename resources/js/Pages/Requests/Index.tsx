@@ -1,5 +1,11 @@
 import Pagination from "@/Components/entities/Pagination";
 import RequestPreview from "@/Components/entities/RequestPreview";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/Components/ui/accordion";
 import { Button } from "@/Components/ui/button";
 import { Card, CardHeader } from "@/Components/ui/card";
 import {
@@ -77,29 +83,47 @@ export default function Index({
             <div className="space-y-4">
                 <Card>
                     <CardHeader>
-                        <ChartContainer
-                            config={chartConfig}
-                            className="max-h-64 w-full"
-                        >
-                            <BarChart accessibilityLayer data={monthlyRequests}>
-                                <CartesianGrid vertical={false} />
-                                <XAxis
-                                    dataKey="month"
-                                    tickLine={false}
-                                    tickMargin={10}
-                                    axisLine={false}
-                                    tickFormatter={(value) => value.slice(0, 3)}
-                                />
-                                <ChartTooltip
-                                    content={<ChartTooltipContent />}
-                                />
-                                <Bar
-                                    dataKey="requestsCount"
-                                    fill="var(--color-requestsCount)"
-                                    radius={4}
-                                />
-                            </BarChart>
-                        </ChartContainer>
+                        <Accordion type="single" collapsible>
+                            <AccordionItem value="item-1">
+                                <AccordionTrigger>
+                                    <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                                        Обращения за последнии 6 месяцев
+                                    </h2>
+                                </AccordionTrigger>
+                                <AccordionContent>
+                                    <ChartContainer
+                                        config={chartConfig}
+                                        className="max-h-64 w-full"
+                                    >
+                                        <BarChart
+                                            accessibilityLayer
+                                            data={monthlyRequests}
+                                        >
+                                            <CartesianGrid vertical={false} />
+                                            <XAxis
+                                                dataKey="month"
+                                                tickLine={false}
+                                                tickMargin={10}
+                                                axisLine={false}
+                                                tickFormatter={(value) =>
+                                                    value.slice(0, 3)
+                                                }
+                                            />
+                                            <ChartTooltip
+                                                content={
+                                                    <ChartTooltipContent />
+                                                }
+                                            />
+                                            <Bar
+                                                dataKey="requestsCount"
+                                                fill="var(--color-requestsCount)"
+                                                radius={4}
+                                            />
+                                        </BarChart>
+                                    </ChartContainer>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
                     </CardHeader>
                 </Card>
                 <Card>
