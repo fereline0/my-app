@@ -87,7 +87,8 @@ export default function Index({
                             <AccordionItem value="item-1">
                                 <AccordionTrigger>
                                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                                        Обращения за последнии 6 месяцев
+                                        Статистика обращений за последнии 6
+                                        месяцев
                                     </h2>
                                 </AccordionTrigger>
                                 <AccordionContent>
