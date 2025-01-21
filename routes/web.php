@@ -19,13 +19,7 @@ Route::middleware('auth')->group(function () {
         Route::post('', [RequestController::class, 'store'])->name('requests.store');
 
         Route::prefix('{id}')->group(function () {
-            Route::put('open', [RequestController::class, 'open'])
-                ->name('requests.open')
-                ->middleware('checkRequestOwnershipOrPermissions:edit request status');
-
-            Route::put('close', [RequestController::class, 'close'])
-                ->name('requests.close')
-                ->middleware('checkRequestOwnershipOrPermissions:edit request status');
+            Route::post('status', [RequestController::class, 'updateStatus'])->name('requests.updateStatus')->middleware('checkRequestOwnershipOrPermissions:edit request status');
 
             Route::get('edit', [RequestController::class, 'edit'])
                 ->name('requests.edit')

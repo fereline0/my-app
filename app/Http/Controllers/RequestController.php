@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RequestRequest;
+use App\Http\Requests\RequestStatusRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Request as UserRequest;
@@ -29,12 +30,15 @@ class RequestController extends Controller
 
         $comments = $userRequest->comments()->with('user')->paginate(20);
 
+        $statuses = Status::all();
+
         $user = $request->user();
 
         $permissions = $user->getAllPermissions()->pluck('name')->toArray();
 
         return Inertia::render('Requests/Show', [
             'request' => $userRequest,
+            'statuses' => $statuses,
             'comments' => $comments,
             'permissions' => $permissions,
         ]);
@@ -61,6 +65,17 @@ class RequestController extends Controller
         return Redirect::route('requests.show', $request->id);
     }
 
+    public function updateStatus(RequestStatusRequest $request, $id)
+    {
+        $validatedData = $request->validated();
+
+        $userRequest = UserRequest::findOrFail($id);
+        $userRequest->status_id = $validatedData['status_id'];
+        $userRequest->save();
+
+        return Redirect::route('requests.show', $id);
+    }
+
     public function edit($id)
     {
         $request = UserRequest::with('category')->findOrFail($id);
@@ -82,34 +97,6 @@ class RequestController extends Controller
             'value' => $validatedData['value'],
             'category_id' => $validatedData['category_id'],
         ]);
-
-        return Redirect::route('requests.show', $id);
-    }
-
-    public function open($id)
-    {
-        $requestToUpdate = UserRequest::findOrFail($id);
-
-        $closedStatus = Status::where('name', 'Открыто')->first();
-
-        if ($closedStatus) {
-            $requestToUpdate->status_id = $closedStatus->id;
-            $requestToUpdate->save();
-        }
-
-        return Redirect::route('requests.show', $id);
-    }
-
-    public function close($id)
-    {
-        $requestToUpdate = UserRequest::findOrFail($id);
-
-        $closedStatus = Status::where('name', 'Закрыто')->first();
-
-        if ($closedStatus) {
-            $requestToUpdate->status_id = $closedStatus->id;
-            $requestToUpdate->save();
-        }
 
         return Redirect::route('requests.show', $id);
     }

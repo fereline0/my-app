@@ -11,6 +11,7 @@ class Status extends Model
 
     protected $fillable = [
         'name',
+        'is_closed',
     ];
 
     public function requests()

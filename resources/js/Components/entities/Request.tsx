@@ -30,9 +30,27 @@ import Chip from "../ui/chip";
 import InputError from "../ui/input-error";
 import { formatDistance } from "date-fns";
 import { ru } from "date-fns/locale";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "../ui/dialog";
+import IStatus from "@/Interfaces/status";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "../ui/select";
 
 interface IRequestProps {
     request: IRequest;
+    statuses: IStatus[];
     comments: IPagination<IComment>;
     permissions: string[];
 }
@@ -40,26 +58,33 @@ interface IRequestProps {
 export default function Request(props: IRequestProps) {
     const user = usePage().props.auth.user;
 
-    const { data, setData, post, errors, processing, reset } = useForm({
+    const commentForm = useForm({
         request_id: props.request.id,
         value: "",
     });
 
+    const statusForm = useForm({
+        status_id: props.request.status?.id || "",
+    });
+
     const createComment: FormEventHandler = (e) => {
         e.preventDefault();
-        reset();
-        post(route("comments.store"));
+        commentForm.reset();
+        commentForm.post(route("comments.store"));
+    };
+
+    const updateStatus: FormEventHandler = (e) => {
+        e.preventDefault();
+        statusForm.post(route("requests.updateStatus", props.request.id));
     };
 
     const canEdit =
         props.permissions.includes("edit request") ||
-        (props.request.user_id == user.id &&
-            props.request.status?.name == "Открыто");
+        (props.request.user_id == user.id && props.request.status?.is_closed);
 
     const canDelete =
         props.permissions.includes("delete request") ||
-        (props.request.user_id == user.id &&
-            props.request.status?.name == "Открыто");
+        (props.request.user_id == user.id && props.request.status?.is_closed);
 
     const canEditStatus = props.permissions.includes("edit request status");
 
@@ -85,97 +110,136 @@ export default function Request(props: IRequestProps) {
                         </div>
 
                         {(canEditStatus || canDelete || canEdit) && (
-                            <AlertDialog>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger>
-                                        <Button size="icon">
-                                            <IoMdMore size={20} />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
-                                        {canEditStatus && (
-                                            <>
-                                                {props.request.status?.name ===
-                                                "Открыто" ? (
-                                                    <DropdownMenuItem>
-                                                        <Link
-                                                            href={route(
-                                                                "requests.close",
-                                                                props.request.id
-                                                            )}
-                                                            method="put"
-                                                        >
-                                                            Закрыть обращение
-                                                        </Link>
-                                                    </DropdownMenuItem>
-                                                ) : (
-                                                    <DropdownMenuItem>
-                                                        <Link
-                                                            href={route(
-                                                                "requests.open",
-                                                                props.request.id
-                                                            )}
-                                                            method="put"
-                                                        >
-                                                            Открыть обращение
-                                                        </Link>
-                                                    </DropdownMenuItem>
-                                                )}
-                                            </>
-                                        )}
-                                        {canEdit && (
-                                            <DropdownMenuItem>
+                            <Dialog>
+                                <AlertDialog>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger>
+                                            <Button size="icon">
+                                                <IoMdMore size={20} />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            {canEditStatus && (
+                                                <DropdownMenuItem>
+                                                    <DialogTrigger>
+                                                        Изменить статус
+                                                    </DialogTrigger>
+                                                </DropdownMenuItem>
+                                            )}
+                                            {canEdit && (
+                                                <DropdownMenuItem>
+                                                    <Link
+                                                        href={route(
+                                                            "requests.edit",
+                                                            props.request.id
+                                                        )}
+                                                    >
+                                                        Редактировать
+                                                    </Link>
+                                                </DropdownMenuItem>
+                                            )}
+                                            {canDelete && (
+                                                <DropdownMenuItem>
+                                                    <AlertDialogTrigger>
+                                                        Удалить
+                                                    </AlertDialogTrigger>
+                                                </DropdownMenuItem>
+                                            )}
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>
+                                                Вы уверены, что хотите удалить
+                                                обращение?
+                                            </AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                После удаления обращения вы не
+                                                сможете восстановить его. Данное
+                                                действие необратимо.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>
+                                                Отмена
+                                            </AlertDialogCancel>
+
+                                            <AlertDialogAction>
                                                 <Link
                                                     href={route(
-                                                        "requests.edit",
+                                                        "requests.destroy",
                                                         props.request.id
                                                     )}
+                                                    method="delete"
                                                 >
-                                                    Редактировать
+                                                    Удалить обращение
                                                 </Link>
-                                            </DropdownMenuItem>
-                                        )}
-                                        {canDelete && (
-                                            <DropdownMenuItem>
-                                                <AlertDialogTrigger>
-                                                    Удалить
-                                                </AlertDialogTrigger>
-                                            </DropdownMenuItem>
-                                        )}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>
-                                            Вы уверены, что хотите удалить
-                                            обращение?
-                                        </AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            После удаления обращения вы не
-                                            сможете восстановить его. Данное
-                                            действие необратимо.
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>
-                                            Отмена
-                                        </AlertDialogCancel>
-
-                                        <AlertDialogAction>
-                                            <Link
-                                                href={route(
-                                                    "requests.destroy",
-                                                    props.request.id
-                                                )}
-                                                method="delete"
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>
+                                            Изменение статуса обращения
+                                        </DialogTitle>
+                                        <DialogDescription>
+                                            <div className="space-y-2">
+                                                <Select
+                                                    defaultValue={props.request.status_id.toString()}
+                                                    onValueChange={(value) =>
+                                                        statusForm.setData(
+                                                            "status_id",
+                                                            value
+                                                        )
+                                                    }
+                                                >
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Выберите статус" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {props.statuses.map(
+                                                            (status) => (
+                                                                <SelectItem
+                                                                    key={
+                                                                        status.id
+                                                                    }
+                                                                    value={status.id.toString()}
+                                                                >
+                                                                    {
+                                                                        status.name
+                                                                    }
+                                                                </SelectItem>
+                                                            )
+                                                        )}
+                                                    </SelectContent>
+                                                </Select>
+                                                <p>
+                                                    {statusForm.data
+                                                        .status_id &&
+                                                    props.statuses.find(
+                                                        (status) =>
+                                                            status.id.toString() ===
+                                                            statusForm.data
+                                                                .status_id
+                                                    )?.is_closed
+                                                        ? "Выбранный статус закрывает обращение"
+                                                        : "Выбранный статус открывает обращение"}
+                                                </p>
+                                            </div>
+                                        </DialogDescription>
+                                        <DialogFooter>
+                                            <Button
+                                                disabled={statusForm.processing}
+                                                onClick={updateStatus}
                                             >
-                                                Удалить обращение
-                                            </Link>
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
+                                                Обновить
+                                            </Button>
+                                        </DialogFooter>
+                                    </DialogHeader>
+                                </DialogContent>
+                            </Dialog>
                         )}
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -198,26 +262,30 @@ export default function Request(props: IRequestProps) {
                     <p>{props.request.value}</p>
                 </CardHeader>
             </Card>
-            {props.permissions.length > 0 ||
-            props.request.status?.name == "Открыто" ? (
+            {props.permissions.length > 0 || props.request.status?.is_closed ? (
                 <Card>
                     <CardHeader>
                         <div className="space-y-4">
                             <div className="w-full space-y-2">
                                 <Textarea
                                     id="value"
-                                    value={data.value}
+                                    value={commentForm.data.value}
                                     onChange={(e) =>
-                                        setData("value", e.target.value)
+                                        commentForm.setData(
+                                            "value",
+                                            e.target.value
+                                        )
                                     }
                                     required
                                     autoFocus
                                     placeholder="Комментарий"
                                 />
-                                <InputError message={errors.value} />
+                                <InputError
+                                    message={commentForm.errors.value}
+                                />
                             </div>
                             <Button
-                                disabled={processing}
+                                disabled={commentForm.processing}
                                 onClick={createComment}
                             >
                                 Создать

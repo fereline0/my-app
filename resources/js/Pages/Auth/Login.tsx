@@ -86,7 +86,7 @@ export default function Login({
                             Забыли пароль?
                         </Link>
                     )}
-                    <Link href={route("register")}>Есть аккаунт?</Link>
+                    <Link href={route("register")}>Нет аккаунта?</Link>
                 </div>
                 <Button
                     className="w-full"
