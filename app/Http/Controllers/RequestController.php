@@ -32,9 +32,7 @@ class RequestController extends Controller
 
         $statuses = Status::all();
 
-        $user = $request->user();
-
-        $permissions = $user->getAllPermissions()->pluck('name')->toArray();
+        $permissions = $request->user()->getAllPermissions()->pluck('name')->toArray();
 
         return Inertia::render('Requests/Show', [
             'request' => $userRequest,
@@ -103,6 +101,7 @@ class RequestController extends Controller
 
     public function index(Request $request)
     {
+        $permissions = $request->user()->getAllPermissions()->pluck('name')->toArray();
         $query = $request->input('search');
         $statusId = $request->input('status');
         $categoryId = $request->input('category');
@@ -151,6 +150,7 @@ class RequestController extends Controller
             'statuses' => $statuses,
             'categories' => $categories,
             'monthlyRequests' => $monthlyRequests,
+            'permissions' => $permissions,
         ]);
     }
 

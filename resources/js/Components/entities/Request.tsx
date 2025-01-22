@@ -80,11 +80,11 @@ export default function Request(props: IRequestProps) {
 
     const canEdit =
         props.permissions.includes("edit request") ||
-        (props.request.user_id == user.id && props.request.status?.is_closed);
+        (props.request.user_id == user.id && !props.request.status?.is_closed);
 
     const canDelete =
         props.permissions.includes("delete request") ||
-        (props.request.user_id == user.id && props.request.status?.is_closed);
+        (props.request.user_id == user.id && !props.request.status?.is_closed);
 
     const canEditStatus = props.permissions.includes("edit request status");
 
@@ -262,7 +262,8 @@ export default function Request(props: IRequestProps) {
                     <p>{props.request.value}</p>
                 </CardHeader>
             </Card>
-            {props.permissions.length > 0 || props.request.status?.is_closed ? (
+            {props.permissions.length > 0 ||
+            !props.request.status?.is_closed ? (
                 <Card>
                     <CardHeader>
                         <div className="space-y-4">

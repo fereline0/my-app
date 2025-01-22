@@ -33,7 +33,7 @@ export default function Edit({ request, categories }: IEditProps) {
 
     const updateRequest: FormEventHandler = (e) => {
         e.preventDefault();
-        put(route("requests.update", request.id));
+        put(route("dashboard.requests.update", request.id));
     };
 
     return (

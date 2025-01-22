@@ -19,6 +19,12 @@ class PermissionsSeeder extends Seeder
     $permissions = [
       'edit request',
       'delete request',
+      'create status',
+      'edit status',
+      'delete status',
+      'create category',
+      'edit category',
+      'delete category',
       'edit request status',
     ];
 
