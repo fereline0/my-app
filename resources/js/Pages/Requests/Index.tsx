@@ -58,7 +58,7 @@ export default function Index(props: IIndexProps) {
     }, []);
 
     const search = () => {
-        get(route("requests.index"), { preserveState: true });
+        get(route("dashboard.requests.index"), { preserveState: true });
     };
 
     const chartConfig = {
