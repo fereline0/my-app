@@ -15,14 +15,14 @@ interface IEditProps {
 }
 
 export default function Edit(props: IEditProps) {
-    const { data, setData, post, errors, processing } = useForm({
+    const { data, setData, put, errors, processing } = useForm({
         name: props.status.name,
         is_closed: props.status.is_closed,
     });
 
     const updateStatus: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route("dashboard.statuses.update", props.status.id));
+        put(route("dashboard.statuses.update", props.status.id));
     };
 
     return (
