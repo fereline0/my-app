@@ -21,16 +21,16 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('{id}')->group(function () {
             Route::post('status', [RequestController::class, 'updateStatus'])->name('updateStatus')->middleware('permission:edit request status');
-            Route::get('edit', [RequestController::class, 'edit'])->name('edit')->middleware('permission:edit request');
-            Route::put('', [RequestController::class, 'update'])->name('update')->middleware('permission:edit request');
-            Route::get('', [RequestController::class, 'show'])->name('show')->middleware('permission:edit request');
-            Route::delete('', [RequestController::class, 'destroy'])->name('destroy')->middleware('permission:delete request');
+            Route::get('edit', [RequestController::class, 'edit'])->name('edit')->middleware('authorizeRequestAccess:edit request');
+            Route::put('', [RequestController::class, 'update'])->name('update')->middleware('authorizeRequestAccess:edit request');
+            Route::get('', [RequestController::class, 'show'])->name('show')->middleware('authorizeRequestAccess:edit request, edit request status, delete request');
+            Route::delete('', [RequestController::class, 'destroy'])->name('destroy')->middleware('authorizeRequestAccess:delete request');
         });
     });
 
     Route::prefix('comments')->name('comments.')->group(function () {
         Route::post('', [CommentController::class, 'store'])->name('store');
-        Route::prefix('{id}')->middleware('checkCommentOwnership')->group(function () {
+        Route::prefix('{id}')->middleware('authorizeCommentAccess')->group(function () {
             Route::get('edit', [CommentController::class, 'edit'])->name('edit');
             Route::put('', [CommentController::class, 'update'])->name('update');
             Route::delete('', [CommentController::class, 'destroy'])->name('destroy');

@@ -33,7 +33,7 @@ export default function Edit({ request, categories }: IEditProps) {
 
     const updateRequest: FormEventHandler = (e) => {
         e.preventDefault();
-        put(route("dashboard.requests.update", request.id));
+        put(route("requests.update", request.id));
     };
 
     return (
@@ -102,7 +102,6 @@ export default function Edit({ request, categories }: IEditProps) {
 
                             <InputError message={errors.category_id} />
                         </div>
-
                         <Button disabled={processing} onClick={updateRequest}>
                             Обновить
                         </Button>

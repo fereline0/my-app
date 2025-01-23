@@ -80,11 +80,11 @@ export default function Request(props: IRequestProps) {
 
     const canEdit =
         props.permissions.includes("edit request") ||
-        (props.request.user_id == user.id && !props.request.status?.is_closed);
+        props.request.user_id == user.id;
 
     const canDelete =
         props.permissions.includes("delete request") ||
-        (props.request.user_id == user.id && !props.request.status?.is_closed);
+        props.request.user_id == user.id;
 
     const canEditStatus = props.permissions.includes("edit request status");
 

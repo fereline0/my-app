@@ -33,7 +33,14 @@ class PermissionsSeeder extends Seeder
     }
 
     $user = Role::create(['name' => 'user']);
+    $operator = Role::create(['name' => 'operator']);
     $admin = Role::create(['name' => 'admin']);
+
+    $operator->givePermissionTo([
+      'edit request',
+      'delete request',
+      'edit request status',
+    ]);
 
     $admin->givePermissionTo(Permission::all());
   }

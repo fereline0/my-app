@@ -160,6 +160,6 @@ class RequestController extends Controller
 
         $request->delete();
 
-        return Redirect::back();
+        return Redirect::route('index');
     }
 }

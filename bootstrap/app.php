@@ -12,9 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'checkCommentOwnership' => \App\Http\Middleware\CheckCommentOwnership::class,
-            'checkPermissions' => \App\Http\Middleware\CheckPermissions::class,
-            'checkRequestOwnershipOrPermissions' => \App\Http\Middleware\CheckRequestOwnershipOrPermissions::class,
+            'authorizeCommentAccess' => \App\Http\Middleware\AuthorizeCommentAccess::class,
+            'authorizeRequestAccess' => \App\Http\Middleware\AuthorizeRequestAccess::class,
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
