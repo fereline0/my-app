@@ -64,7 +64,7 @@ export default function Request(props: IRequestProps) {
     });
 
     const statusForm = useForm({
-        status_id: props.request.status?.id || "",
+        status_id: props.request.status_id.toString() || "",
     });
 
     const createComment: FormEventHandler = (e) => {
@@ -186,6 +186,18 @@ export default function Request(props: IRequestProps) {
                                         </DialogTitle>
                                         <DialogDescription>
                                             <div className="space-y-2">
+                                                <p>
+                                                    {statusForm.data
+                                                        .status_id &&
+                                                    props.statuses.find(
+                                                        (status) =>
+                                                            status.id.toString() ===
+                                                            statusForm.data
+                                                                .status_id
+                                                    )?.is_closed
+                                                        ? "Выбранный статус закрывает обращение"
+                                                        : "Выбранный статус открывает обращение"}
+                                                </p>
                                                 <Select
                                                     defaultValue={props.request.status_id.toString()}
                                                     onValueChange={(value) =>
@@ -215,18 +227,6 @@ export default function Request(props: IRequestProps) {
                                                         )}
                                                     </SelectContent>
                                                 </Select>
-                                                <p>
-                                                    {statusForm.data
-                                                        .status_id &&
-                                                    props.statuses.find(
-                                                        (status) =>
-                                                            status.id.toString() ===
-                                                            statusForm.data
-                                                                .status_id
-                                                    )?.is_closed
-                                                        ? "Выбранный статус закрывает обращение"
-                                                        : "Выбранный статус открывает обращение"}
-                                                </p>
                                             </div>
                                         </DialogDescription>
                                         <DialogFooter>

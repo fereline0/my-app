@@ -18,7 +18,7 @@ export default function Edit({
                 </h2>
             }
         >
-            <Head title="Profile" />
+            <Head title="Профиль" />
 
             <Tabs defaultValue="updateProfileInformationForm">
                 <TabsList>
