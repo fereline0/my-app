@@ -15,7 +15,7 @@ class CommentStoreRequest extends FormRequest
     {
         return [
             'request_id' => 'required|exists:requests,id',
-            'value' => 'required|string|max:255',
+            'value' => 'required|string',
         ];
     }
 
@@ -31,7 +31,6 @@ class CommentStoreRequest extends FormRequest
             'request_id.exists' => 'Указанное обращение не существует.',
             'value.required' => 'Комментарий обязателен для заполнения.',
             'value.string' => 'Комментарий должен быть строкой.',
-            'value.max' => 'Комментарий не должен превышать 255 символов.',
         ];
     }
 }

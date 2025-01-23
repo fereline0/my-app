@@ -14,7 +14,7 @@ class CommentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'value' => 'required|string|max:255',
+            'value' => 'required|string',
         ];
     }
 
@@ -28,7 +28,6 @@ class CommentUpdateRequest extends FormRequest
         return [
             'value.required' => 'Комментарий обязателен для заполнения.',
             'value.string' => 'Комментарий должен быть строкой.',
-            'value.max' => 'Комментарий не должен превышать 255 символов.',
         ];
     }
 }

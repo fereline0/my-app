@@ -9,9 +9,23 @@ class CategorySeeder extends Seeder
 {
     public function run(): void
     {
-        Category::create(['name' => "Вопрос"]);
-        Category::create(['name' => "Проблема"]);
-        Category::create(['name' => "Предложение"]);
-        Category::create(['name' => "Отзыв"]);
+        $categories = [
+            [
+                "name" => "Вопрос",
+            ],
+            [
+                "name" => "Проблема",
+            ],
+            [
+                "name" => "Предложение",
+            ],
+            [
+                "name" => "Отзыв",
+            ]
+        ];
+
+        foreach ($categories as $category) {
+            Category::create($category);
+        }
     }
 }
