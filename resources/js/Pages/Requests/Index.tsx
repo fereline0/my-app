@@ -77,7 +77,7 @@ export default function Index(props: IIndexProps) {
             }
         >
             <DashboardLayout permissions={props.permissions}>
-                <Head title="Мои обращения" />
+                <Head title="Обращения" />
                 <div className="space-y-4">
                     <Card>
                         <CardHeader>
